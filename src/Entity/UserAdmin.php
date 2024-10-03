@@ -1,6 +1,7 @@
 <!-- ?php
 
-require_once 'User.php';
+namespace App\Entity;
+require_once __DIR__ . '/../bootstrap.php';
 use Doctrine\ORM\Mapping as ORM;
 
 // Indicamos que esta clase constituye una entidad, que se traducirá en una
