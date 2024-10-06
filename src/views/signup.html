@@ -6,7 +6,8 @@
     <title>Sign Up</title>
 </head>
 <body>
-    <form action="" method="POST" id="form">
+    <form action="../../public//index.php" method="POST" id="form">
+        <input type="hidden" name="form_type" value="signup">
         <label for="email">Email</label>
         <input type="email" id="email" name="email">
     
@@ -20,10 +21,11 @@
         <input type="password" id="password" name="password">
     
         <label for="confirmPassword">Confirm password</label>
-        <input type="password" id="confirmPassword" name="confirmPass">
+        <input type="password" id="confirmPass" name="confirmPass">
     
         <input type="submit" value="Signup" name="send">
     </form>
+    <div id="respuesta"></div>
 </body>
-<script src="../../public//js//signUp.js"></script>
+<script src="../../public/js/signUp.js"></script>
 </html>

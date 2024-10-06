@@ -20,15 +20,24 @@ class SignUp extends UserData {
     }
 
     public function check_email(string $email): UserData | bool | Throwable {
-        $email_in_use =  $this->email_exists($email);
+
+        $email_in_use =  $this->emailExists($email);
         if($email_in_use === null){
             return false;
         }
 
         return $email_in_use;
     }
-
+    public function toArray(): array {
+        return [
+            'name' => $this->name,
+            'lastname' => $this->lastname,
+            'email' => $this->email,
+            'adminPrivileges' => $this->adminPrivileges
+        ];
+    }
     public function hash_password(string $password): string | Throwable {
+
         try {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             return $hashed_password;
@@ -39,6 +48,7 @@ class SignUp extends UserData {
 
     public function create_user(string $email, string $name, string $lastname, string $password, bool $adminPrivileges): string | Throwable {
         $email_in_use = $this->check_email($email); 
+        //  var_dump($email_in_use !== null);
         if ($email_in_use) {
             return "Email already in use";
         }
@@ -54,7 +64,6 @@ class SignUp extends UserData {
                 $adminPrivileges,
                 $this->entityManager 
             );
-    
             $this->entityManager->persist($new_user);  
             $this->entityManager->flush();
     
@@ -65,14 +74,14 @@ class SignUp extends UserData {
     }
 }
 
-$name = "John";
-$lastname = "Doe";
-$email = "johna.doe@exampledda.com";
-$password = "securepassword"; 
-$adminPrivileges = false;
+// $name = "John";
+// $lastname = "Doe";
+// $email = "johnd.doe@exampledda.com";
+// $password = "securepassword"; 
+// $adminPrivileges = false;
 
-$signUp = new SignUp($name, $lastname, $password, $email, $adminPrivileges, $entityManager);
+// $signUp = new SignUp($name, $lastname, $password, $email, $adminPrivileges, $entityManager);
 
-$result = $signUp->create_user($email, $name, $lastname, $password, $adminPrivileges);
-echo $result;
+// $result = $signUp->create_user($email, $name, $lastname, $password, $adminPrivileges);
+// echo $result;
 

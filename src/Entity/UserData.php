@@ -62,11 +62,11 @@ class UserData {
         return $this->password;
     }
 
-    public function email_exists(string $email): UserData | Throwable | null {
+    public function emailExists(string $email): UserData | Throwable | null {
         try {
             $user_email = $this->entityManager->getRepository(UserData::class)
                 ->findOneBy(['email' => $email]);
-    
+            
             return $user_email; 
         } catch (Throwable $err) {
             return $err; 
