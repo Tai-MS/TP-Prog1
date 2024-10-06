@@ -1,35 +1,26 @@
-<?php
+<!-- ?php
 
-namespace App\Entity;
-require_once './src/bootstrap.php';
-use Doctrine\ORM\Mapping as ORM;
+    namespace App\Entity;
 
-#[ORM\Entity]
-#[ORM\Table(name: "Usuarios")]
-class User extends UserData {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: "integer")]
-    private $id;
+    require_once __DIR__ . '/../bootstrap.php';
 
-    #[ORM\Column(type: "string")]
-    protected string $password;  
+    use Doctrine\Common\Collections\Collection;
+    use Doctrine\ORM\Mapping as ORM;
 
-    public function __construct(string $name, string $lastname, string $password, string $email, bool $adminPrivileges) {
-        parent::__construct($name, $lastname, $password, $email, $adminPrivileges);
-    }
+    #[ORM\Entity]
+    #[ORM\Table(name: "Usuarios")]
+    class User extends UserData {
 
-    public function getId(): ?int {
-        return $this->id;
-    }
+        #[ORM\OneToMany(targetEntity: tickets::class, mappedBy: 'tickets')]
+        public Collection|null $user_tickets = null;
 
-    // Getters y Setters
-    public function setPassword(string $password): self {
-        $this->password = $password;
-        return $this;
-    }
+        public function __construct(string $name, string $lastname, string $password, string $email, bool $adminPrivileges) {
+            parent::__construct($name, $lastname, $password, $email, $adminPrivileges);
+        }
 
-    public function getPassword(): string {
-        return $this->password;
-    }
-}
+        // Getters y Setters
+        public function setPassword(string $password): self {
+            $this->password = $password;
+            return $this;
+        }
+    } -->
