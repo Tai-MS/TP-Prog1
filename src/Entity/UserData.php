@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 // use Dotenv\Dotenv;
 use Doctrine\ORM\Mapping as ORM;
@@ -34,7 +35,10 @@ class UserData {
 
     #[ORM\Column(type: "boolean")]
     protected bool $adminPrivileges;
-    
+
+    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'user')]
+    protected Collection $ticket_user;
+
     public function __construct(string $name, string $lastname, string $password, string $email, bool $adminPrivileges, EntityManagerInterface $entityManager) {
         $this->name = $name;
         $this->lastname = $lastname;
@@ -62,11 +66,11 @@ class UserData {
         return $this->password;
     }
 
-    public function email_exists(string $email): UserData | Throwable | null {
+    public function emailExists(string $email): UserData | Throwable | null {
         try {
             $user_email = $this->entityManager->getRepository(UserData::class)
                 ->findOneBy(['email' => $email]);
-    
+            
             return $user_email; 
         } catch (Throwable $err) {
             return $err; 
