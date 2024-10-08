@@ -9,7 +9,7 @@ require_once __DIR__ . '/../bootstrap.php';
 
 $dotenv = Dotenv::createImmutable(__DIR__. "/../..");  
 $dotenv->load();
-$SECRET_KEY = $_ENV['SECRET_KEY'];
+
 
 class SignUp extends UserData {
     private EntityManagerInterface $entityManager;
@@ -28,16 +28,8 @@ class SignUp extends UserData {
 
         return $email_in_use;
     }
-    public function toArray(): array {
-        return [
-            'name' => $this->name,
-            'lastname' => $this->lastname,
-            'email' => $this->email,
-            'adminPrivileges' => $this->adminPrivileges
-        ];
-    }
-    public function hash_password(string $password): string | Throwable {
 
+    public function hash_password(string $password): string | Throwable {
         try {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             return $hashed_password;
@@ -46,11 +38,17 @@ class SignUp extends UserData {
         }
     }
 
-    public function create_user(string $email, string $name, string $lastname, string $password, bool $adminPrivileges): string | Throwable {
+    public function create_user(string $email, string $name, string $lastname, string $password, bool $adminPrivileges): string | Throwable | array {
+        $response = [
+            'status' => '',
+            'message' => ''
+        ];
         $email_in_use = $this->check_email($email); 
-        //  var_dump($email_in_use !== null);
         if ($email_in_use) {
-            return "Email already in use";
+            $response['status'] = 'error';
+            $response['message'] = 'Email already in use'; 
+            
+            return $response;
         }
         
         $hashed_password = $this->hash_password($password);
@@ -67,21 +65,14 @@ class SignUp extends UserData {
             $this->entityManager->persist($new_user);  
             $this->entityManager->flush();
     
-            return "User created. ID: " . $new_user->getId();
+            $response['status'] = 'success';
+            $response['message'] = 'User created';
+            $response['redirect'] = '/src/views/login.html';
+
+            return $response;
         } catch (Throwable $err) {
             return $err;
         }
     }
 }
-
-// $name = "John";
-// $lastname = "Doe";
-// $email = "johnd.doe@exampledda.com";
-// $password = "securepassword"; 
-// $adminPrivileges = false;
-
-// $signUp = new SignUp($name, $lastname, $password, $email, $adminPrivileges, $entityManager);
-
-// $result = $signUp->create_user($email, $name, $lastname, $password, $adminPrivileges);
-// echo $result;
 
