@@ -2,15 +2,16 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
-use Dotenv\Dotenv;
+// use Dotenv\Dotenv;
 use Doctrine\ORM\Mapping as ORM;
 use Throwable;
 
 
-$dotenv = Dotenv::createImmutable(__DIR__. "/../..");  
-$dotenv->load();
-$SECRET_KEY = $_ENV['SECRET_KEY'];
+// $dotenv = Dotenv::createImmutable(__DIR__. "/../..");  
+// $dotenv->load();
+// $SECRET_KEY = $_ENV['SECRET_KEY'];
 #[ORM\Entity]
 #[ORM\Table(name: "Usuarios")]
 class UserData {
@@ -34,7 +35,10 @@ class UserData {
 
     #[ORM\Column(type: "boolean")]
     protected bool $adminPrivileges;
-    
+
+    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'user')]
+    protected Collection $ticket_user;
+
     public function __construct(string $name, string $lastname, string $password, string $email, bool $adminPrivileges, EntityManagerInterface $entityManager) {
         $this->name = $name;
         $this->lastname = $lastname;
