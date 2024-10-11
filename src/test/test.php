@@ -1,14 +1,14 @@
 <?php
 
-require_once 'bootstrap.php';
+// require_once 'bootstrap.php';
 
-use App\Service\ProductService;
+use App\Entity\ProductService;
 
 // Obtener el EntityManager desde el bootstrap
 $entityManager = require_once __DIR__ . '/../bootstrap.php';
 
 // Crear un nuevo servicio de producto
-$productService = new ProductService("Laptop", 1000, 10, $entityManager);
+$productService = new ProductService("Laptop", 1000, 10, null, null, null);
 
 // Leer un producto (con ID 1, por ejemplo)
 $product = $productService->readProduct(1);
