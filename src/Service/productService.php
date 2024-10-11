@@ -2,17 +2,16 @@
 
 namespace App\Entity;
 
-use App\Entity\Product;
 use Doctrine\ORM\EntityManagerInterface;
 use Throwable;
 
-class ProductoService extends Product
+class ProductService extends Product
 {
     private EntityManagerInterface $entityManager;
-    public function __construct(string $name, float $price, int $stock, EntityManagerInterface $entityManager)
+
+    public function __construct(?string $name, ?int $price, ?int $stock, ?string $discount, ?string $imgUrl, ?Purchase $purchase_product)
     {
-        $this->entityManager = $entityManager;
-        parent::__construct($name, $price, $stock, $entityManager);
+        parent::__construct($name, $price, $stock, $discount, $imgUrl, $purchase_product);
     }
 
     public function adjustStock(int $id, int $quantity, string $action): string

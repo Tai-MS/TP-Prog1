@@ -34,7 +34,7 @@ class Product{
     #[ORM\ManyToOne(targetEntity: Purchase::class, inversedBy: 'products')]
     protected Purchase|null $purchase_product = null;
 
-    public function __construct(string $name, int $price, int $stock, string $discount, string $imgUrl, ?Purchase $purchase_product) {
+    public function __construct(?string $name, ?int $price, ?int $stock, ?string $discount, ?string $imgUrl, ?Purchase $purchase_product) {
         $this->name = $name;
         $this->price = $price;
         $this->stock = $stock;
