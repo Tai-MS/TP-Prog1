@@ -27,8 +27,5 @@ class Product{
 
     #[ORM\Column(type: 'string')]
     protected string $imagen;
-
-    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'product')]
-    protected Collection $ticket_product;
     
 }
