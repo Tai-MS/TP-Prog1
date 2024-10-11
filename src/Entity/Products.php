@@ -5,11 +5,13 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManager;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'products')]
 
 class Product{
+    private EntityManagerInterface $entityManager;
 
     #[ORM\Id, ORM\Column(type:'integer'), ORM\GeneratedValue]
     protected int|null $id = null;
@@ -29,15 +31,16 @@ class Product{
     #[ORM\Column(type: 'string')]
     protected string $imgUrl;
 
-    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'product')]
-    protected Collection $ticket_product;
-    public function __construct(string $name, int $price, int $stock, EntityManagerInterface $entityManager) {
+    #[ORM\ManyToOne(targetEntity: Purchase::class, inversedBy: 'products')]
+    protected Purchase|null $purchase_product = null;
+
+    public function __construct(string $name, int $price, int $stock, string $discount, string $imgUrl, ?Purchase $purchase_product) {
         $this->name = $name;
         $this->price = $price;
         $this->stock = $stock;
         $this->discount = $discount;
         $this->imgUrl = $imgUrl;
-        $this->entityManager = $entityManager;
+        $this->purchase_product = $purchase_product;        
     }
     public function getId(): ?int
     {
@@ -62,6 +65,9 @@ class Product{
     public function price(): ?int
     {
         return $this->price;
+    }
+    public function getPurchaseProduct(): ?Purchase{
+        return $this->purchase_product;
     }
     public function setStock(int $stock): self
     {

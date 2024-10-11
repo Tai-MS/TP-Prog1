@@ -77,10 +77,9 @@ class UserData {
         }
     }
     
-
-    // public function setPassword(string $password): void{
-    //     $this->password = password_hash($password, PASSWORD_DEFAULT);
-    // }
+    public function setPassword(string $password): void{
+        $this->password = $password;
+    }
 
     public function hasAdminPrivileges(): bool {
         return $this->adminPrivileges;

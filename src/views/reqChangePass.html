@@ -7,20 +7,17 @@
 </head>
 <body>
     <form action="../../public//index.php" method="POST" id="form">
-        <input type="hidden" name="form_type" value="login">
+        <input type="hidden" name="form_type" value="recover">
 
         <label for="email">Email</label>
         <input type="text" name="email" id="email">
     
-        <label for="pass">Password</label>
+        <!-- <label for="pass">Password</label>
         <input type="password" name="password" id="pass">
-    
-        <input type="submit" name="send" id="send">
+    -->
+        <input type="submit" name="send" id="send"> 
     </form>
-    <div id="result"></div>
-    <a href="reqChangePass.html">Forgot your password?</a>
-    <br>
-    <a href="signup.html">Do not have an account? Sign Up!</a>
+    <div id="respuesta"></div>
 </body>
-<script src="../../public/js/login.js"></script>
+<script src="../../public/js/recoverPassword.js"></script>
 </html>
