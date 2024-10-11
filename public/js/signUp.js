@@ -24,23 +24,22 @@ document.addEventListener("DOMContentLoaded", function() {
      }
       fetch(url, {method: "POST", body: formData})
          .then(response => response.json())
-         .then( data => { result(data); })
+         .then( data => { 
+            if (data.status === 'success') {
+               window.location.href = data.redirect;
+           } else {
+               result(data);
+           }
+          })
          .catch( error => {console.log(error);});
     });
  });
 
  
 function result(data){
-   let message
-   if(data === "Email already in use"){
-      message = `
-         <p>Email already in use</p>
-      `
-   }else{
-      message = `
-           <p>Usuario creado</p>
-       `;
-   }
+   let message = `
+      <p>${data.message}</p>
+   `
 
     return document.querySelector('#respuesta').innerHTML = message;
 }

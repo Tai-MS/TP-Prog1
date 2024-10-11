@@ -9,7 +9,7 @@ require_once __DIR__ . '/../bootstrap.php';
 
 $dotenv = Dotenv::createImmutable(__DIR__. "/../..");  
 $dotenv->load();
-$SECRET_KEY = $_ENV['SECRET_KEY'];
+
 
 class LoginService extends UserData {
 
@@ -39,24 +39,30 @@ class LoginService extends UserData {
         }
     }
 
-    public function login($email, $password): string | bool | Throwable{
+    public function login($email, $password): string | bool | array | Throwable{
         try {
-            $verify_password = $this->comparePassword($email, $password);
+            $ADMIN_EMAIL = $_ENV['ADMIN_EMAIL'];
+            $ADMIN_PASSWORD = $_ENV['ADMIN_PASSWORD'];
             $response = [
                 'status' => '',
                 'message' => ''
             ];
             
-            if($verify_password === 0){
+            $verify_password = $this->comparePassword($email, $password);
+            if($ADMIN_EMAIL === $email && $ADMIN_PASSWORD === $password){
+                $response['status'] = 'success';
+                $response['message'] = 'Loged In as Admin';
+                $response['redirect'] = '/src/views/index.html';
+            }else if($verify_password === 0){
                 $response['status'] = 'error';
                 $response['message'] = 'User not found';
             }else if(!$verify_password){
                 $response['status'] = 'error';
                 $response['message'] = 'Invalid password or email';
             }else{
-
                 $response['status'] = 'success';
                 $response['message'] = 'Logged in';
+                $response['redirect'] = '/src/views/index.html';
             }
             return json_encode($response);
         } catch (Throwable $err) {
