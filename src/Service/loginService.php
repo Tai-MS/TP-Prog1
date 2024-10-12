@@ -53,6 +53,7 @@ class LoginService extends UserData {
                 $response['status'] = 'success';
                 $response['message'] = 'Loged In as Admin';
                 $response['redirect'] = '/src/views/index.html';
+                setcookie('isAdmin', 'true', time() + 3600, '/');
             }else if($verify_password === 0){
                 $response['status'] = 'error';
                 $response['message'] = 'User not found';

@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", function() {
          .then(response => response.json())
          .then( data => { 
             if (data.status === 'success') {
+               console.log(data.specialCookie);
+               
                window.location.href = data.redirect;
            } else {
                result(data);
