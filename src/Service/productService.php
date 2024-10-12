@@ -1,17 +1,20 @@
 <?php
-
 namespace App\Entity;
+
 
 use Doctrine\ORM\EntityManagerInterface;
 use Throwable;
+require_once __DIR__ . '/../bootstrap.php';
 
 class ProductService extends Product
 {
     private EntityManagerInterface $entityManager;
 
-    public function __construct(?string $name, ?int $price, ?int $stock, ?string $discount, ?string $imgUrl, ?Purchase $purchase_product)
+    public function __construct(string $name, int $price, int $stock, string $discount, string $imgUrl, EntityManagerInterface $entityManager)
     {
-        parent::__construct($name, $price, $stock, $discount, $imgUrl, $purchase_product);
+        parent::__construct($name, $price, $stock, $discount, $imgUrl, $entityManager);
+        $this->entityManager = $entityManager;        
+
     }
 
     public function adjustStock(int $id, int $quantity, string $action): string

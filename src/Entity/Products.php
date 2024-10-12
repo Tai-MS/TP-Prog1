@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+// use Dotenv\Dotenv;
+use Doctrine\ORM\Mapping as ORM;
+use Throwable;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'products')]
@@ -34,13 +35,14 @@ class Product{
     #[ORM\ManyToOne(targetEntity: Purchase::class, inversedBy: 'products')]
     protected Purchase|null $purchase_product = null;
 
-    public function __construct(?string $name, ?int $price, ?int $stock, ?string $discount, ?string $imgUrl, ?Purchase $purchase_product) {
+    public function __construct(string $name, int $price, int $stock, int $discount, string $imgUrl, EntityManagerInterface $entityManager) {
         $this->name = $name;
         $this->price = $price;
         $this->stock = $stock;
         $this->discount = $discount;
         $this->imgUrl = $imgUrl;
-        $this->purchase_product = $purchase_product;        
+        // $this->purchase_product = $purchase_product;
+        $this->entityManager = $entityManager;        
     }
     public function getId(): ?int
     {
@@ -50,11 +52,11 @@ class Product{
     {
         return $this->name;
     }
-    public function getStock(): ?int
+    public function getStock()
     {
         return $this->stock;
     }
-    public function getDiscount(): ?int
+    public function getDiscount()
     {
         return $this->discount;
     }
@@ -62,7 +64,7 @@ class Product{
     {
         return $this->imgUrl;
     }
-    public function price(): ?int
+    public function price()
     {
         return $this->price;
     }
@@ -86,10 +88,10 @@ class Product{
         $this->stock = max(0, $this->stock - $amount); 
         return $this;
     }
-    public function readProduct(int $id): ?Product {
+    public function readProduct(int $id): Product | Throwable {
         try {
             return $this->entityManager->getRepository(Product::class)->find($id);
-        } catch (\Throwable $err) {
+        } catch (Throwable $err) {
             return $err;
         }
     }
