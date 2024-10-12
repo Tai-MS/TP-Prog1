@@ -12,7 +12,6 @@ use Throwable;
 #[ORM\Table(name: 'products')]
 
 class Product{
-    private EntityManagerInterface $entityManager;
 
     #[ORM\Id, ORM\Column(type:'integer'), ORM\GeneratedValue]
     protected int|null $id = null;
@@ -35,14 +34,13 @@ class Product{
     #[ORM\ManyToOne(targetEntity: Purchase::class, inversedBy: 'products')]
     protected Purchase|null $purchase_product = null;
 
-    public function __construct(string $name, int $price, int $stock, int $discount, string $imgUrl, EntityManagerInterface $entityManager) {
+    public function __construct(string $name, int $price, int $stock, int $discount, string $imgUrl) {
         $this->name = $name;
         $this->price = $price;
         $this->stock = $stock;
         $this->discount = $discount;
         $this->imgUrl = $imgUrl;
-        // $this->purchase_product = $purchase_product;
-        $this->entityManager = $entityManager;        
+        // $this->purchase_product = $purchase_product;     
     }
     public function getId(): ?int
     {
@@ -77,22 +75,8 @@ class Product{
         return $this;
     }
 
-    public function increaseStock(int $amount): self
+    public function __toString()
     {
-        $this->stock += $amount;
-        return $this;
-    }
-
-    public function decreaseStock(int $amount): self
-    {
-        $this->stock = max(0, $this->stock - $amount); 
-        return $this;
-    }
-    public function readProduct(int $id): Product | Throwable {
-        try {
-            return $this->entityManager->getRepository(Product::class)->find($id);
-        } catch (Throwable $err) {
-            return $err;
-        }
+        return "Producto '{$this->name}': Precio $ {$this->price}, Stock {$this->stock}, Discount {$this->discount}, ImgUrl {$this->imgUrl}";
     }
 }
