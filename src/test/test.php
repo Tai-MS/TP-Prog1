@@ -1,14 +1,15 @@
 <?php
-
+namespace App\Entity;
 // require_once 'bootstrap.php';
-
-use App\Entity\ProductService;
-
+require_once __DIR__ . '/../../vendor/autoload.php';
+// use App\Entity\ProductService;
+use Doctrine\ORM\EntityManagerInterface;
+require_once '../Service/productService.php';
 // Obtener el EntityManager desde el bootstrap
-$entityManager = require_once __DIR__ . '/../bootstrap.php';
-
+require_once __DIR__ . '/../bootstrap.php';
+// ?string $name, ?int $price, ?int $stock, ?string $discount, ?string $imgUrl, ?Purchase $purchase_product, EntityManagerInterface $entityManager
 // Crear un nuevo servicio de producto
-$productService = new ProductService("Laptop", 1000, 10, null, null, null);
+$productService = new ProductService("Laptop", 1000, 10, 0, "null", $entityManager);
 
 // Leer un producto (con ID 1, por ejemplo)
 $product = $productService->readProduct(1);
