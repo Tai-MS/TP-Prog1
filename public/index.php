@@ -16,6 +16,17 @@ if(isset($_POST["email"])){
 if(isset($_POST["password"])){
     $password = $_POST["password"];  
 }
+require_once '../src/Service/recoverPassword.php';
+require_once '../src/Service/emailSender.php';
+
+
+if(isset($_POST["email"])){
+    $email = $_POST["email"];
+}
+
+if(isset($_POST["password"])){
+    $password = $_POST["password"];  
+}
 
 $formType = $_POST['form_type'];
 
@@ -26,7 +37,9 @@ if($formType === 'signup'){
     $usr = new SignUp($name, $lastname, $password, $email, $adminPrivileges, $entityManager);
     header('Content-Type: application/json; charset=utf-8');
 
+
     $result = $usr->create_user($email, $name, $lastname, $password, $adminPrivileges);
+
 
     echo json_encode($result);
 
@@ -35,7 +48,7 @@ if($formType === 'signup'){
     header('Content-Type: application/json; charset=utf-8');
 
     $result = $login->login($email, $password);
-
+    // var_dump($result['specialCookie']);
     echo $result;
 }else if($formType === 'recover'){
 

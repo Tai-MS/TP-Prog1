@@ -11,6 +11,7 @@ $dotenv = Dotenv::createImmutable(__DIR__. "/../..");
 $dotenv->load();
 
 
+
 class LoginService extends UserData {
 
     private EntityManagerInterface $entityManager;
@@ -43,6 +44,8 @@ class LoginService extends UserData {
         try {
             $ADMIN_EMAIL = $_ENV['ADMIN_EMAIL'];
             $ADMIN_PASSWORD = $_ENV['ADMIN_PASSWORD'];
+            $ADMIN_EMAIL = $_ENV['ADMIN_EMAIL'];
+            $ADMIN_PASSWORD = $_ENV['ADMIN_PASSWORD'];
             $response = [
                 'status' => '',
                 'message' => ''
@@ -53,6 +56,7 @@ class LoginService extends UserData {
                 $response['status'] = 'success';
                 $response['message'] = 'Loged In as Admin';
                 $response['redirect'] = '/src/views/index.html';
+                setcookie('isAdmin', 'true', time() + 3600, '/');
             }else if($verify_password === 0){
                 $response['status'] = 'error';
                 $response['message'] = 'User not found';
@@ -62,6 +66,7 @@ class LoginService extends UserData {
             }else{
                 $response['status'] = 'success';
                 $response['message'] = 'Logged in';
+                $response['redirect'] = '/src/views/index.html';
                 $response['redirect'] = '/src/views/index.html';
             }
             return json_encode($response);
