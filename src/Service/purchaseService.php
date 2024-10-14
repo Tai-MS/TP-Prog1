@@ -6,40 +6,50 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Throwable;
 
-class purchaseService extends Purchase {
+class purchaseService {
     private EntityManagerInterface $entityManager;
 
-    public function __construct(Collection $products, int $amount, ?Ticket $ticket)
+    public function __construct($entityManager)
     {
-        parent::__construct($products, $amount, $ticket);
+        $this->entityManager = $entityManager;
     }
 
     public function createPurchase(Collection $products, int $amount){
         try{
-            $productService = new ProductService(null, null, null, null, null, null);
-
             foreach($products as $product){
-                if(!$product){
-                    return $response = [
+
+                // $purchase = new Purchase()
+                $productService = new ProductService($this->entityManager);
+                $productId = $productService->readProduct($product)->getId();
+
+                if(!$productId){
+                    return json_encode($response = [
                         'status' => 'error',
                         'message' => 'Product Id: ' . $product . ' not found'
-                    ];
+                    ]);
                 }
 
-                $purchaseService = $this->entityManager->getRepository(Product::class)->findOneBy(['id' => $product]);
-                $productStock = $purchaseService->verifyStock($product);
+                $currentProduct = $productService->readProduct($product);
 
-                if(!is_int($productStock)){
-                    return $response = [
+                if(!is_int($currentProduct->getId())){
+                    return json_encode($response = [
                         'status' => 'error',
                         'message' => 'Product Id: ' . $product . ' not found'
-                    ];
+                    ]);
                 }
 
-                if($productStock >= $amount){
+                if($currentProduct->getStock() >= $amount){
                     $productService->adjustStock($product, $amount, 'decrement');
                 }
             }
+
+            $response = [
+                'status' => 'success',
+                'message' => 'Successful purchase'
+            ];
+
+            return json_encode($response);
+
         }catch (Throwable $error){
             return $error->getMessage();
         }

@@ -3,7 +3,6 @@
 namespace App\Entity;
 require_once __DIR__ . '/../bootstrap.php';
 require_once '../Service/productService.php';
-use Doctrine\ORM\EntityManagerInterface;
 
 $productService = new ProductService($entityManager);
 // $product = $productService->createProduct("Laptop", 1000, 10, 0, "null", $entityManager);

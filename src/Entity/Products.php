@@ -2,11 +2,10 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\EntityManagerInterface;
 // use Dotenv\Dotenv;
 use Doctrine\ORM\Mapping as ORM;
-use Throwable;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'products')]
@@ -31,8 +30,8 @@ class Product{
     #[ORM\Column(type: 'string')]
     protected string $imgUrl;
 
-    #[ORM\ManyToOne(targetEntity: Purchase::class, inversedBy: 'products')]
-    protected Purchase|null $purchase_product = null;
+    #[ORM\OneToMany(targetEntity: Purchase::class, mappedBy: 'product', cascade: ['persist', 'remove'])]
+    protected Collection $purchaseProduct;
 
     public function __construct(string $name, int $price, int $stock, int $discount, string $imgUrl) {
         $this->name = $name;
@@ -40,7 +39,7 @@ class Product{
         $this->stock = $stock;
         $this->discount = $discount;
         $this->imgUrl = $imgUrl;
-        // $this->purchase_product = $purchase_product;     
+        $this->purchaseProduct = new ArrayCollection();     
     }
     public function getId(): ?int
     {
@@ -66,8 +65,8 @@ class Product{
     {
         return $this->price;
     }
-    public function getPurchaseProduct(): ?Purchase{
-        return $this->purchase_product;
+    public function getPurchaseProduct(): ?Collection{
+        return $this->purchaseProduct;
     }
     public function setStock(int $stock): self
     {

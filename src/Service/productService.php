@@ -1,11 +1,10 @@
 <?php
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+require_once __DIR__ . '/../bootstrap.php';
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Product;
 use Throwable;
-require_once __DIR__ . '/../bootstrap.php';
 
 class ProductService
 {

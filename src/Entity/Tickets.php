@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
@@ -28,10 +29,10 @@ class Ticket{
     #[ORM\Column(type: 'datetime')]
     protected DateTime $date_ticket;
 
-    protected function __construct(?UserData $user, Collection $purchase, int $total_value, ?DateTime $date_ticket)
+    protected function __construct(?UserData $user, int $total_value, ?DateTime $date_ticket)
     {
         $this->user = $user;
-        $this->purchase = $purchase;
+        $this->purchase = new ArrayCollection();
         $this->total_value = $total_value;
         $this->date_ticket = $date_ticket ?? new DateTime();
     }

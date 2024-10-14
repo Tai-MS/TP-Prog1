@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table('purchases')]
@@ -13,19 +14,15 @@ class Purchase {
     #[ORM\Id, ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: "purchase_product", cascade: ['persist', 'remove'])]
-    public Collection $products;
+    #[ORM\OneToMany(targetEntity: PurchaseProduct::class, mappedBy: 'purchase', cascade: ['persist', 'remove'])]
+    private Collection $items;
 
     #[ORM\ManyToOne(targetEntity: Ticket::class, inversedBy: "purchase")]
     public Ticket|null $ticket = null;
 
-    #[ORM\Column(type: "integer")]
-    public int $amount;
-
-    public function __construct(Collection $products, int $amount, ?Ticket $ticket)
+    public function __construct(?Ticket $ticket = null)
     {
-        $this->products = $products;
-        $this->amount = $amount;
+        $this->items = new ArrayCollection();
         $this->ticket = $ticket;
     }
 
@@ -33,15 +30,19 @@ class Purchase {
         return $this->id;
     }
 
-    public function getProducts(): Collection {
-        return $this->products;
+    public function addItems(PurchaseProduct $item): void {
+        $this->items->add($item);
+    }
+
+    public function getitems(): Collection {
+        return $this->items;
     }
 
     public function getTicket(): ?Ticket {
         return $this->ticket;
     }
 
-    public function getAmount(): int {
-        return $this->amount;
+    public function setTicket(Ticket $ticket): void {
+        $this->ticket = $ticket;
     }
 }
