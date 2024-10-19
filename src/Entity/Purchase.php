@@ -11,8 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 class Purchase {
 
-    #[ORM\Id, ORM\Column(type: 'integer')]
-    private int $id;
+    #[ORM\Id, ORM\Column(type: 'integer'), ORM\GeneratedValue]
+    private int|null $id = null;
 
     #[ORM\OneToMany(targetEntity: PurchaseProduct::class, mappedBy: 'purchase', cascade: ['persist', 'remove'])]
     private Collection $items;

@@ -14,44 +14,52 @@ class purchaseService {
         $this->entityManager = $entityManager;
     }
 
-    public function createPurchase(Collection $products, int $amount){
-        try{
-            foreach($products as $product){
+    // public function createPurchase(Collection $products, int $amount){
+    //     try{
+    //         foreach($products as $product){
 
-                // $purchase = new Purchase()
-                $productService = new ProductService($this->entityManager);
-                $productId = $productService->readProduct($product)->getId();
+    //             // $purchase = new Purchase()
+    //             $productService = new ProductService($this->entityManager);
+    //             $productId = $productService->readProduct($product)->getId();
 
-                if(!$productId){
-                    return json_encode($response = [
-                        'status' => 'error',
-                        'message' => 'Product Id: ' . $product . ' not found'
-                    ]);
-                }
+    //             if(!$productId){
+    //                 return json_encode($response = [
+    //                     'status' => 'error',
+    //                     'message' => 'Product Id: ' . $product . ' not found'
+    //                 ]);
+    //             }
 
-                $currentProduct = $productService->readProduct($product);
+    //             $currentProduct = $productService->readProduct($product);
 
-                if(!is_int($currentProduct->getId())){
-                    return json_encode($response = [
-                        'status' => 'error',
-                        'message' => 'Product Id: ' . $product . ' not found'
-                    ]);
-                }
+    //             if(!is_int($currentProduct->getId())){
+    //                 return json_encode($response = [
+    //                     'status' => 'error',
+    //                     'message' => 'Product Id: ' . $product . ' not found'
+    //                 ]);
+    //             }
 
-                if($currentProduct->getStock() >= $amount){
-                    $productService->adjustStock($product, $amount, 'decrement');
-                }
-            }
+    //             if($currentProduct->getStock() >= $amount){
+    //                 $productService->adjustStock($product, $amount, 'decrement');
+    //             }
+    //         }
 
-            $response = [
-                'status' => 'success',
-                'message' => 'Successful purchase'
-            ];
+    //         $response = [
+    //             'status' => 'success',
+    //             'message' => 'Successful purchase'
+    //         ];
 
-            return json_encode($response);
+    //         return json_encode($response);
 
-        }catch (Throwable $error){
-            return $error->getMessage();
-        }
-    }
+    //     }catch (Throwable $error){
+    //         return $error->getMessage();
+    //     }
+    // }
+
+    // public function addItems(PurchaseProduct $item): ?Throwable{
+    //     try{
+    //         $item = 
+    //     }catch(Throwable $error){
+    //         return $error->getMessage();
+    //     }
+    // }
 }

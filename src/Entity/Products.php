@@ -30,7 +30,7 @@ class Product{
     #[ORM\Column(type: 'string')]
     protected string $imgUrl;
 
-    #[ORM\OneToMany(targetEntity: Purchase::class, mappedBy: 'product', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: PurchaseProduct::class, mappedBy: 'product', cascade: ['persist', 'remove'])]
     protected Collection $purchaseProduct;
 
     public function __construct(string $name, int $price, int $stock, int $discount, string $imgUrl) {

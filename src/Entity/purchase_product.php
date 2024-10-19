@@ -27,6 +27,10 @@ class PurchaseProduct {
         $this->quantity = $quantity;
     }
 
+    public function getId(): int {
+        return $this->id;
+    }
+    
     public function getProduct(): Product {
         return $this->product;
     }
