@@ -8,58 +8,27 @@ use Throwable;
 
 class purchaseService {
     private EntityManagerInterface $entityManager;
-
+    
     public function __construct($entityManager)
     {
         $this->entityManager = $entityManager;
     }
+    
+    public function addPurchase(Product $items, int $quantity, Ticket $ticket) {
+        try{
+            $productService = new ProductService($this->entityManager);
 
-    // public function createPurchase(Collection $products, int $amount){
-    //     try{
-    //         foreach($products as $product){
+            if($items->getStock() >= $quantity){
+                $productService->adjustStock($items->getId(), $quantity, 'decrement');
+            }
 
-    //             // $purchase = new Purchase()
-    //             $productService = new ProductService($this->entityManager);
-    //             $productId = $productService->readProduct($product)->getId();
-
-    //             if(!$productId){
-    //                 return json_encode($response = [
-    //                     'status' => 'error',
-    //                     'message' => 'Product Id: ' . $product . ' not found'
-    //                 ]);
-    //             }
-
-    //             $currentProduct = $productService->readProduct($product);
-
-    //             if(!is_int($currentProduct->getId())){
-    //                 return json_encode($response = [
-    //                     'status' => 'error',
-    //                     'message' => 'Product Id: ' . $product . ' not found'
-    //                 ]);
-    //             }
-
-    //             if($currentProduct->getStock() >= $amount){
-    //                 $productService->adjustStock($product, $amount, 'decrement');
-    //             }
-    //         }
-
-    //         $response = [
-    //             'status' => 'success',
-    //             'message' => 'Successful purchase'
-    //         ];
-
-    //         return json_encode($response);
-
-    //     }catch (Throwable $error){
-    //         return $error->getMessage();
-    //     }
-    // }
-
-    // public function addItems(PurchaseProduct $item): ?Throwable{
-    //     try{
-    //         $item = 
-    //     }catch(Throwable $error){
-    //         return $error->getMessage();
-    //     }
-    // }
+            $purchase = new Purchase($items, $quantity, $ticket);
+    
+            $this->entityManager->persist($purchase);
+            $this->entityManager->flush();
+    
+        }catch(Throwable $error){
+            return $error->getMessage();
+        }
+    }
 }

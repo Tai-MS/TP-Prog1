@@ -14,15 +14,19 @@ class Purchase {
     #[ORM\Id, ORM\Column(type: 'integer'), ORM\GeneratedValue]
     private int|null $id = null;
 
-    #[ORM\OneToMany(targetEntity: PurchaseProduct::class, mappedBy: 'purchase', cascade: ['persist', 'remove'])]
-    private Collection $items;
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'purchaseProduct')]
+    private Product $items;
 
     #[ORM\ManyToOne(targetEntity: Ticket::class, inversedBy: "purchase")]
     public Ticket|null $ticket = null;
 
-    public function __construct(?Ticket $ticket = null)
+    #[ORM\Column(type: 'integer')]
+    private int $quantity;
+
+    public function __construct(Product $items, int $quantity, Ticket $ticket)
     {
-        $this->items = new ArrayCollection();
+        $this->items = $items;
+        $this->quantity = $quantity;
         $this->ticket = $ticket;
     }
 
@@ -30,16 +34,16 @@ class Purchase {
         return $this->id;
     }
 
-    public function addItems(PurchaseProduct $item): void {
-        $this->items->add($item);
-    }
-
-    public function getitems(): Collection {
+    public function getItems(): Product {
         return $this->items;
     }
 
-    public function getTicket(): ?Ticket {
+    public function getTicket(): Ticket {
         return $this->ticket;
+    }
+
+    public function getQuantity(): int {
+        return $this->quantity;
     }
 
     public function setTicket(Ticket $ticket): void {

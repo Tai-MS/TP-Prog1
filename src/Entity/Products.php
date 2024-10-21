@@ -19,18 +19,18 @@ class Product{
     protected string $name;
 
     #[ORM\Column(type: 'integer')]
-    protected string $stock;
+    protected int $stock;
 
     #[ORM\Column(type: 'integer')]
-    protected string $price;
+    protected int $price;
 
     #[ORM\Column(type: 'integer')]
-    protected string $discount;
+    protected int $discount;
 
     #[ORM\Column(type: 'string')]
     protected string $imgUrl;
 
-    #[ORM\OneToMany(targetEntity: PurchaseProduct::class, mappedBy: 'product', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: Purchase::class, mappedBy: 'items', cascade: ['persist', 'remove'])]
     protected Collection $purchaseProduct;
 
     public function __construct(string $name, int $price, int $stock, int $discount, string $imgUrl) {

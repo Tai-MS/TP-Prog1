@@ -18,22 +18,18 @@ class Ticket{
     private int|null $id = null;
 
     #[ORM\ManyToOne(targetEntity: UserData::class, inversedBy: 'ticket_user')]
-    protected UserData|null $user = null;  
+    public UserData $user;  
 
     #[ORM\OneToMany(targetEntity: Purchase::class, mappedBy: 'ticket', cascade: ['persist', 'remove'])]
-    protected Collection $purchase;  
-
-    #[ORM\Column(type: 'integer')]
-    protected int $total_value;
+    public Collection $purchase;  
 
     #[ORM\Column(type: 'datetime')]
-    protected DateTime $date_ticket;
+    public DateTime $date_ticket;
 
-    protected function __construct(?UserData $user, int $total_value, ?DateTime $date_ticket)
+    public function __construct(?UserData $user, ?DateTime $date_ticket)
     {
         $this->user = $user;
         $this->purchase = new ArrayCollection();
-        $this->total_value = $total_value;
         $this->date_ticket = $date_ticket ?? new DateTime();
     }
 
@@ -45,15 +41,23 @@ class Ticket{
         return $this->user;
     }
 
-    public function getpurchase(): Collection{
+    public function getPurchase(): Collection{
         return $this->purchase;
-    }
-
-    public function getTotalValue(): int{
-        return $this->total_value;
     }
 
     public function getDateTime(): ?DateTime{
         return $this->date_ticket;
+    }
+
+    public function setUser(UserData $user): void {
+        $this->user = $user;
+    }
+
+    public function addPurchase(Purchase $purchase): self {
+        if (!$this->purchase->contains($purchase)) {
+            $this->purchase->add($purchase);
+            $purchase->setTicket($this);
+        }
+        return $this;
     }
 }
