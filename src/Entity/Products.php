@@ -2,16 +2,16 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+// use Dotenv\Dotenv;
+use Doctrine\ORM\Mapping as ORM;
+use Throwable;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'products')]
 
 class Product{
-    private EntityManagerInterface $entityManager;
 
     #[ORM\Id, ORM\Column(type:'integer'), ORM\GeneratedValue]
     protected int|null $id = null;
@@ -34,13 +34,13 @@ class Product{
     #[ORM\ManyToOne(targetEntity: Purchase::class, inversedBy: 'products')]
     protected Purchase|null $purchase_product = null;
 
-    public function __construct(?string $name, ?int $price, ?int $stock, ?string $discount, ?string $imgUrl, ?Purchase $purchase_product) {
+    public function __construct(string $name, int $price, int $stock, int $discount, string $imgUrl) {
         $this->name = $name;
         $this->price = $price;
         $this->stock = $stock;
         $this->discount = $discount;
         $this->imgUrl = $imgUrl;
-        $this->purchase_product = $purchase_product;        
+        // $this->purchase_product = $purchase_product;     
     }
     public function getId(): ?int
     {
@@ -50,11 +50,11 @@ class Product{
     {
         return $this->name;
     }
-    public function getStock(): ?int
+    public function getStock()
     {
         return $this->stock;
     }
-    public function getDiscount(): ?int
+    public function getDiscount()
     {
         return $this->discount;
     }
@@ -62,7 +62,7 @@ class Product{
     {
         return $this->imgUrl;
     }
-    public function price(): ?int
+    public function price()
     {
         return $this->price;
     }
@@ -75,22 +75,8 @@ class Product{
         return $this;
     }
 
-    public function increaseStock(int $amount): self
+    public function __toString()
     {
-        $this->stock += $amount;
-        return $this;
-    }
-
-    public function decreaseStock(int $amount): self
-    {
-        $this->stock = max(0, $this->stock - $amount); 
-        return $this;
-    }
-    public function readProduct(int $id): ?Product {
-        try {
-            return $this->entityManager->getRepository(Product::class)->find($id);
-        } catch (\Throwable $err) {
-            return $err;
-        }
+        return "Producto '{$this->name}': Precio $ {$this->price}, Stock {$this->stock}, Discount {$this->discount}, ImgUrl {$this->imgUrl}";
     }
 }
