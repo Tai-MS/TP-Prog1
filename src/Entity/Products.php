@@ -62,7 +62,7 @@ class Product{
     {
         return $this->imgUrl;
     }
-    public function price()
+    public function getPrice()
     {
         return $this->price;
     }

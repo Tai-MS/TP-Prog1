@@ -4,6 +4,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Product;
+use Doctrine\Common\Collections\Collection;
 use Throwable;
 require_once __DIR__ . '/../bootstrap.php';
 
@@ -24,15 +25,26 @@ class ProductService
             return $product;
 
         }catch(Throwable $error) { 
-            return $error->getMessage();
+            return $error;
         }
     }
 
     public function readProduct(int $id): Product | Throwable {
         try {
-            return $this->entityManager->getRepository(Product::class)->find($id);
+            $product = $this->entityManager->getRepository(Product::class)->find($id);
+            var_dump($product);
+            return $product;
         } catch (Throwable $err) {
-            return $err->getMessage();
+            return $err;
+        }
+    }
+
+    public function getAll(): array | Throwable {
+        try {
+            $products = $this->entityManager->getRepository(Product::class)->findAll();
+            return $products;
+        } catch (Throwable $err) {
+            return $err;
         }
     }
 

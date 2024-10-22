@@ -1,25 +1,57 @@
 <?php
+namespace App\Entity;
 
+use App\Entity\ProductService;
 
-require_once __DIR__ . '/src/Entity/productService.php';
-
+require_once '../Service/productService.php';
 // Crear instancia del servicio de producto
-$productService = new \App\Entity\ProductService("Example", 100, 10, $entityManager);
+// $productService = new \App\Entity\ProductService("Example", 100, 10, $entityManager);
+use Doctrine\ORM\EntityManagerInterface;
 
-// Verificar la acción solicitada (listar, incrementar, decrementar)
+$productService = new ProductService($entityManager);
+
 $action = $_REQUEST['action'] ?? null;
 
 if ($action === 'list') {
-    // Listar productos
-    $products = $productService->getAllProducts();
-    echo "<h3>Listado de Productos</h3>";
-    echo "<ul>";
+    $products = $productService->getAll();
+    echo "<h3 class='text-xl font-bold mb-4'>Listado de Productos</h3>";
+    echo "<ul class='space-y-2'>";
     foreach ($products as $product) {
-        echo "<li>ID: " . $product->getId() . " - " . $product->getName() . " - Precio: " . $product->getPrice() . " - Stock: " . $product->getStock() . "</li>";
+        echo "<li class='border-b border-gray-300 py-2'>ID: " . $product->getId() . 
+             " - Nombre: " . $product->getName() . 
+             " - Precio: " . $product->getPrice() . 
+             " - Stock: " . $product->getStock() . "</li>";
     }
     echo "</ul>";
-} elseif ($action === 'increment' || $action === 'decrement') {
-    // Obtener el ID del producto y la cantidad
+
+} elseif ($action === 'price'){
+    $products = $productService->getAll();
+
+$sortOrder = $_GET['sort'] ?? null;
+
+
+if ($sortOrder === 'cheaper') {
+    usort($products, function($a, $b) {
+        return $a->getPrice() <=> $b->getPrice(); 
+    });
+}else{
+    usort($products, function($a, $b) {
+        return $b->getPrice() <=> $a->getPrice();
+    });
+
+}
+
+
+echo "<h3 class='text-xl font-bold mb-4'>Listado de Productos</h3>";
+echo "<ul class='space-y-2'>";
+foreach ($products as $product) {
+    echo "<li class='border-b border-gray-300 py-2'>ID: " . $product->getId() . 
+         " - Nombre: " . $product->getName() . 
+         " - Precio: " . $product->getPrice() . 
+         " - Stock: " . $product->getStock() . "</li>";
+}
+echo "</ul>";
+}elseif ($action === 'increment' || $action === 'decrement') {
     $productId = $_POST['productId'] ?? null;
     $quantity = $_POST['quantity'] ?? null;
 
