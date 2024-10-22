@@ -13,6 +13,22 @@ class ProductService
     public function __construct(EntityManagerInterface $entityManager){
         $this->entityManager = $entityManager;
     }
+    
+    public function getAllProducts(){        
+        try{
+            return $this->entityManager->getRepository(Product::class)->findAll();
+        }catch(Throwable $error){
+            throw new \Exception('Error a la hora de obtenes todos los productos: ' . $error->getMessage());
+        }
+    }
+
+    public function getFilterProducts(string $text){
+        try{
+            return $this->entityManager->getRepository(Product::class)->findBy(array('name' => $text));
+        }catch(Throwable $error){
+            throw new \Exception('Ocurrio un erro a la hora de filtrar los productos: ' . $error->getMessage());
+        }
+    }
 
     public function createProduct(string $name, int $price, int $stock, ?int $discount, ?string $imgUrl): Product | Throwable{
         try{

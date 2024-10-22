@@ -61,7 +61,7 @@ class Product{
     {
         return $this->imgUrl;
     }
-    public function price()
+    public function getPrice()
     {
         return $this->price;
     }
@@ -72,10 +72,5 @@ class Product{
     {
         $this->stock = $stock;
         return $this;
-    }
-
-    public function __toString()
-    {
-        return "Producto '{$this->name}': Precio $ {$this->price}, Stock {$this->stock}, Discount {$this->discount}, ImgUrl {$this->imgUrl}";
     }
 }
