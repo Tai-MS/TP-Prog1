@@ -1,27 +1,62 @@
 <?php
-
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Product;
+use Doctrine\Common\Collections\Collection;
 use Throwable;
+require_once __DIR__ . '/../bootstrap.php';
 
-class ProductService extends Product
+class ProductService
 {
     private EntityManagerInterface $entityManager;
 
-    public function __construct(?string $name, ?int $price, ?int $stock, ?string $discount, ?string $imgUrl, ?Purchase $purchase_product)
-    {
-        parent::__construct($name, $price, $stock, $discount, $imgUrl, $purchase_product);
+    public function __construct(EntityManagerInterface $entityManager){
+        $this->entityManager = $entityManager;
     }
 
-    public function adjustStock(int $id, int $quantity, string $action): string
-    {
+    public function createProduct(string $name, int $price, int $stock, ?int $discount, ?string $imgUrl): Product | Throwable{
+        try{
+            $product = new Product($name, $price, $stock, $discount, $imgUrl);
+            $this->entityManager->persist($product);
+            $this->entityManager->flush();
+    
+            return $product;
 
+        }catch(Throwable $error) { 
+            return $error;
+        }
+    }
+
+    public function readProduct(int $id): Product | Throwable {
+        try {
+            $product = $this->entityManager->getRepository(Product::class)->find($id);
+            var_dump($product);
+            return $product;
+        } catch (Throwable $err) {
+            return $err;
+        }
+    }
+
+    public function getAll(): array | Throwable {
+        try {
+            $products = $this->entityManager->getRepository(Product::class)->findAll();
+            return $products;
+        } catch (Throwable $err) {
+            return $err;
+        }
+    }
+
+    public function adjustStock(int $id, int $quantity, string $action)
+    {
         try {
             $product = $this->readProduct($id);
             if ($product === null) {
-                $response['status'] = 'error';
-                $rseponse['message'] = 'Product not found';
+                return $response = [
+                    'status'=> 'error',
+                    'message'=> 'Product not found'
+                ];
             }
 
             $newStock = $action === 'increment'
@@ -29,32 +64,25 @@ class ProductService extends Product
                 : $product->getStock() - $quantity;
 
             if ($newStock < 0) {
-                $response['status'] = 'error';
-                $rseponse['message'] = 'Not enough stock';
+                return $response = [
+                    'status'=> 'error',
+                    'message'=> 'Not enough stock'
+                ];
             }
 
-            $response['status'] = 'success';
-            $rseponse['message'] = 'Product modified';
+            $response = [
+                'status'=> 'success',
+                'message'=> 'Product modified'
+            ];
 
             $product->setStock($newStock);
             $this->entityManager->persist($product);
             $this->entityManager->flush();
 
             return json_encode($response);
-        } catch (Throwable $err) {
-            return $err;
+
+        } catch (Throwable $error) {
+            return $error->getMessage();
         }
     }
 }
-
-
-// $productService = new ProductService("Laptop", 1000, 10, $entityManager);
-
-// $product = $productService->readProduct(1);
-// echo $product->getName();
-
-// $result = $productService->adjustStock7(1, 5, 'increment');
-// echo $result;
-
-// $result = $productService->adjustStock(1, 3, 'decrement');
-// echo $result;
