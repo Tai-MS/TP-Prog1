@@ -29,7 +29,7 @@
             " - Nombre: " . $product->getName() . 
             " - Precio: " . $product->getPrice() . 
             " - Stock: " . $product->getStock() . 
-            " <button class='buy-button' data-name='" . $product->getName() . "' data-price='" . $product->getPrice() . "'>Comprar</button></li>";
+            " <button class='buy-button' data-id=" . $product->getId() . ">Comprar</button></li>";
         }
         echo "</ul>";
         echo '<form action="filter-handler.php" method="get">';
@@ -38,7 +38,7 @@
         echo '<button type="submit">Filtrar</button>';
         echo '</form>';
 
-        echo '<script src="/public/js/products.js"></script>';
+        echo '<script src="../../public/js/products.js"></script>';
     } elseif ($action === 'increment' || $action === 'decrement') {
         header('Content-Type: application/json');
         // Obtener el ID del producto y la cantidad
@@ -77,10 +77,11 @@
             " - Nombre: " . $product->getName() . 
             " - Precio: " . $product->getPrice() . 
             " - Stock: " . $product->getStock() . 
-            " <button class='buy-button' data-name='" . $product->getName() . "' data-price='" . $product->getPrice() . "'>Comprar</button></li>";
+            " <button class='buy-button' data-id=" . $product->getId() . ">Comprar</button></li>";
     }
     echo "</ul>";
-    echo '<script src="/public/js/products.js"></script>';
+
+    echo '<script src="../../public/js/products.js"></script>';
     }elseif ($action === 'increment' || $action === 'decrement') {
         $productId = $_POST['productId'] ?? null;
         $quantity = $_POST['quantity'] ?? null;
