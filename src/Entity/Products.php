@@ -13,25 +13,25 @@ use Doctrine\ORM\Mapping as ORM;
 class Product{
 
     #[ORM\Id, ORM\Column(type:'integer'), ORM\GeneratedValue]
-    protected int|null $id = null;
+    public int|null $id = null;
 
     #[ORM\Column(type: 'string')]
-    protected string $name;
+    public string $name;
 
     #[ORM\Column(type: 'integer')]
-    protected int $stock;
+    public int $stock;
 
     #[ORM\Column(type: 'integer')]
-    protected int $price;
+    public int $price;
 
     #[ORM\Column(type: 'integer')]
-    protected int $discount;
+    public int $discount;
 
     #[ORM\Column(type: 'string')]
-    protected string $imgUrl;
+    public string $imgUrl;
 
     #[ORM\OneToMany(targetEntity: Purchase::class, mappedBy: 'items', cascade: ['persist', 'remove'])]
-    protected Collection $purchaseProduct;
+    public Collection $purchaseProduct;
 
     public function __construct(string $name, int $price, int $stock, int $discount, string $imgUrl) {
         $this->name = $name;
@@ -68,9 +68,15 @@ class Product{
     public function getPurchaseProduct(): ?Collection{
         return $this->purchaseProduct;
     }
-    public function setStock(int $stock): self
+    public function setStock(int $stock): void
     {
         $this->stock = $stock;
+    }
+    public function addPurchaseProduct(Purchase $purchaseProduct): self {
+        if (!$this->purchaseProduct->contains($purchaseProduct)) {
+            $this->purchaseProduct->add($purchaseProduct);
+            $purchaseProduct->setPurchaseProduct($this);
+        }
         return $this;
     }
 }

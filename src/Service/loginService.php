@@ -55,8 +55,8 @@ class LoginService extends UserData {
             if($ADMIN_EMAIL === $email && $ADMIN_PASSWORD === $password){
                 $response['status'] = 'success';
                 $response['message'] = 'Loged In as Admin';
-                $response['redirect'] = '/src/views/index.html';
-                setcookie('isAdmin', 'true', time() + 3600, '/');
+                $response['redirect'] = '/src/views/adminView.html';
+                setcookie('isAdmin', 'true', time() + 30, '/');
             }else if($verify_password === 0){
                 $response['status'] = 'error';
                 $response['message'] = 'User not found';
@@ -66,8 +66,8 @@ class LoginService extends UserData {
             }else{
                 $response['status'] = 'success';
                 $response['message'] = 'Logged in';
-                $response['redirect'] = '/src/views/index.html';
-                $response['redirect'] = '/src/views/index.html';
+                $response['redirect'] = '/src/views/products.html';
+                // $response['redirect'] = '/src/views/index.html';
             }
             return json_encode($response);
         } catch (Throwable $err) {

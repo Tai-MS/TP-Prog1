@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-require_once __DIR__ . 'bootstrap.php';
+require_once __DIR__ . '/../bootstrap.php';
 use App\Entity\UserData;
 use App\Entity\Ticket;
 use DateTime;

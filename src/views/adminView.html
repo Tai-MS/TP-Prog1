@@ -31,5 +31,28 @@
                 <button class="bg-blue-500 text-white px-4 py-2 rounded" type="submit" name="action" value="list">Listar Productos</button>
             </form>
         </div>
+
+        <!-- Incrementar/Decrementar Stock -->
+        <div class="bg-white p-6 mt-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-bold mb-4">Modificar Stock de Producto</h2>
+            <form action="product-handler.php" method="POST">
+                <div class="mb-4">
+                    <label for="productId" class="block text-gray-700">ID de Producto:</label>
+                    <input type="number" id="productId" name="productId" class="w-full p-2 border rounded" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="quantity" class="block text-gray-700">Cantidad:</label>
+                    <input type="number" id="quantity" name="quantity" class="w-full p-2 border rounded" required>
+                </div>
+
+                <div class="flex gap-4">
+                    <button class="bg-green-500 text-white px-4 py-2 rounded" type="submit" name="action" value="increment">Incrementar Stock</button>
+                    <button class="bg-red-500 text-white px-4 py-2 rounded" type="submit" name="action" value="decrement">Decrementar Stock</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </body>
 </html>

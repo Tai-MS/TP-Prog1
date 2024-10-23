@@ -39,15 +39,25 @@ class ProductService
             return $product;
 
         }catch(Throwable $error) { 
-            return $error->getMessage();
+            return $error;
         }
     }
 
     public function readProduct(int $id): Product | Throwable {
         try {
-            return $this->entityManager->getRepository(Product::class)->find($id);
+            $product = $this->entityManager->getRepository(Product::class)->find($id);
+            return $product;
         } catch (Throwable $err) {
-            return $err->getMessage();
+            return $err;
+        }
+    }
+
+    public function getAll(): array | Throwable {
+        try {
+            $products = $this->entityManager->getRepository(Product::class)->findAll();
+            return $products;
+        } catch (Throwable $err) {
+            return $err;
         }
     }
 
@@ -56,10 +66,10 @@ class ProductService
         try {
             $product = $this->readProduct($id);
             if ($product === null) {
-                return $response = [
-                    'status'=> 'error',
-                    'message'=> 'Product not found'
-                ];
+                return json_encode([
+                    'status' => 'error',
+                    'message' => 'Product not found'
+                ]);
             }
 
             $newStock = $action === 'increment'
@@ -67,25 +77,26 @@ class ProductService
                 : $product->getStock() - $quantity;
 
             if ($newStock < 0) {
-                return $response = [
-                    'status'=> 'error',
-                    'message'=> 'Not enough stock'
-                ];
+                return json_encode([
+                    'status' => 'error',
+                    'message' => 'Not enough stock'
+                ]);
             }
-
-            $response = [
-                'status'=> 'success',
-                'message'=> 'Product modified'
-            ];
 
             $product->setStock($newStock);
             $this->entityManager->persist($product);
             $this->entityManager->flush();
 
-            return json_encode($response);
+            return json_encode([
+                'status' => 'success',
+                'message' => 'Product modified'
+            ]);
 
-        } catch (Throwable $error) {
-            return $error->getMessage();
+        }catch (Throwable $error) {
+            return json_encode([
+                'status' => 'error',
+                'message' => $error->getMessage()
+            ]);
         }
     }
 }

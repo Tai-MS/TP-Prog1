@@ -49,4 +49,8 @@ class Purchase {
     public function setTicket(Ticket $ticket): void {
         $this->ticket = $ticket;
     }
+
+    public function setPurchaseProduct(Product $items): void{
+        $this->items = $items;
+    }
 }

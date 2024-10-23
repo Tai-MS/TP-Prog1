@@ -1,0 +1,72 @@
+[
+    {
+        "stock": 12,
+        "name": "Laptop",
+        "price": 1000,
+        "discount": 0,
+        "imgUrl": "null"
+    },
+    {
+        "stock": 8,
+        "name": "Smartphone",
+        "price": 600,
+        "discount": 10,
+        "imgUrl": "null"
+    },
+    {
+        "stock": 15,
+        "name": "Tablet",
+        "price": 300,
+        "discount": 5,
+        "imgUrl": "null"
+    },
+    {
+        "stock": 10,
+        "name": "Monitor",
+        "price": 200,
+        "discount": 0,
+        "imgUrl": "null"
+    },
+    {
+        "stock": 7,
+        "name": "Keyboard",
+        "price": 50,
+        "discount": 0,
+        "imgUrl": "null"
+    },
+    {
+        "stock": 20,
+        "name": "Mouse",
+        "price": 25,
+        "discount": 0,
+        "imgUrl": "null"
+    },
+    {
+        "stock": 5,
+        "name": "Headphones",
+        "price": 75,
+        "discount": 15,
+        "imgUrl": "null"
+    },
+    {
+        "stock": 3,
+        "name": "Smartwatch",
+        "price": 150,
+        "discount": 10,
+        "imgUrl": "null"
+    },
+    {
+        "stock": 18,
+        "name": "Charger",
+        "price": 20,
+        "discount": 0,
+        "imgUrl": "null"
+    },
+    {
+        "stock": 6,
+        "name": "External Hard Drive",
+        "price": 80,
+        "discount": 5,
+        "imgUrl": "null"
+    }
+]
