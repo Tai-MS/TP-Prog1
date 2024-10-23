@@ -12,8 +12,7 @@ document.addEventListener("DOMContentLoaded", function() {
         window.location.href = '/src/views/login.html';
 
     }
-    console.log(cookieAdmin, cookieUser);
-    
+        
     const buyButtons = document.querySelectorAll('.buy-button');
 
     let cartItems = JSON.parse(localStorage.getItem('cart')) || [];  
@@ -35,7 +34,6 @@ document.addEventListener("DOMContentLoaded", function() {
             }
 
             localStorage.setItem('cart', JSON.stringify(cartItems));
-
         });
     });
 });
