@@ -6,7 +6,8 @@ document.addEventListener("DOMContentLoaded", function() {
       const url = form.action;
       fetch(url, {method: "POST", body: formData})
          .then(response => response.json())
-         .then( data => { 
+         .then( data => { console.log(data);
+         
             if (data.status === 'success') {
                console.log(data.specialCookie);
                
