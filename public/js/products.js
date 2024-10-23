@@ -12,14 +12,14 @@ document.addEventListener("DOMContentLoaded", function() {
         window.location.href = '/src/views/login.html';
 
     }
-    console.log(cookieAdmin, cookieUser);
-    
+        
     const buyButtons = document.querySelectorAll('.buy-button');
 
     let cartItems = JSON.parse(localStorage.getItem('cart')) || [];  
 
     buyButtons.forEach(button => {
         button.addEventListener('click', function() {
+            
             const productId = this.getAttribute('data-id');
 
             let existingProduct = cartItems.find(item => item.id === productId);
@@ -34,7 +34,6 @@ document.addEventListener("DOMContentLoaded", function() {
             }
 
             localStorage.setItem('cart', JSON.stringify(cartItems));
-
         });
     });
 });
