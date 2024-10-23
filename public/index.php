@@ -48,6 +48,7 @@ if($formType === 'signup'){
     header('Content-Type: application/json; charset=utf-8');
 
     $result = $login->login($email, $password);
+    
     // var_dump($result['specialCookie']);
     echo $result;
 }else if($formType === 'recover'){

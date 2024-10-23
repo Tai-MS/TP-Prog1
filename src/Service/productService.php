@@ -32,7 +32,7 @@ class ProductService
     public function readProduct(int $id): Product | Throwable {
         try {
             $product = $this->entityManager->getRepository(Product::class)->find($id);
-            var_dump($product);
+            // var_dump($product);
             return $product;
         } catch (Throwable $err) {
             return $err;
