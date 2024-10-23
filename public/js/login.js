@@ -6,14 +6,24 @@ document.addEventListener("DOMContentLoaded", function() {
       const url = form.action;
       fetch(url, {method: "POST", body: formData})
          .then(response => response.json())
-         .then( data => { result(data); })
+         .then( data => { console.log(data);
+         
+            if (data.status === 'success') {
+               console.log(data.specialCookie);
+               
+               window.location.href = data.redirect;
+           } else {
+               result(data);
+           }
+          })
          .catch( error => {console.log(error);});
     });
  });
 
 function result(data){
    console.log(data.message);
-   console.log(typeof data);
+   console.log(data);
+   console.log(data);
    
    
    let message = `

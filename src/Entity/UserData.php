@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 // use Dotenv\Dotenv;
@@ -45,6 +46,7 @@ class UserData {
         $this->password = $password;
         $this->email = $email;
         $this->adminPrivileges = $adminPrivileges;
+        $this->ticket_user = new ArrayCollection();
         $this->entityManager = $entityManager;
     }
 
@@ -77,12 +79,19 @@ class UserData {
         }
     }
     
-
-    // public function setPassword(string $password): void{
-    //     $this->password = password_hash($password, PASSWORD_DEFAULT);
-    // }
+    public function setPassword(string $password): void{
+        $this->password = $password;
+    }
 
     public function hasAdminPrivileges(): bool {
         return $this->adminPrivileges;
+    }
+
+    public function addTicket(Ticket $ticket_user): self {
+        if (!$this->ticket_user->contains($ticket_user)) {
+            $this->ticket_user->add($ticket_user);
+            $ticket_user->setUser($this);
+        }
+        return $this;
     }
 }

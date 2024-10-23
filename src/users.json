@@ -1,0 +1,72 @@
+[
+    {
+        "name": "Alice",
+        "lastname": "Smith",
+        "password": "password123",
+        "email": "alice@example.com",
+        "adminPrivileges": true
+    },
+    {
+        "name": "Bob",
+        "lastname": "Johnson",
+        "password": "securePass456",
+        "email": "bob.johnson@example.com",
+        "adminPrivileges": false
+    },
+    {
+        "name": "Charlie",
+        "lastname": "Williams",
+        "password": "charlie789",
+        "email": "charlie.williams@example.com",
+        "adminPrivileges": false
+    },
+    {
+        "name": "David",
+        "lastname": "Brown",
+        "password": "davidSecure999",
+        "email": "david.brown@example.com",
+        "adminPrivileges": true
+    },
+    {
+        "name": "Eve",
+        "lastname": "Jones",
+        "password": "evePass555",
+        "email": "eve.jones@example.com",
+        "adminPrivileges": false
+    },
+    {
+        "name": "Frank",
+        "lastname": "Garcia",
+        "password": "frank12345",
+        "email": "frank.garcia@example.com",
+        "adminPrivileges": false
+    },
+    {
+        "name": "Grace",
+        "lastname": "Martinez",
+        "password": "grace@pass",
+        "email": "grace.martinez@example.com",
+        "adminPrivileges": true
+    },
+    {
+        "name": "Hannah",
+        "lastname": "Lopez",
+        "password": "hannahSecure123",
+        "email": "hannah.lopez@example.com",
+        "adminPrivileges": false
+    },
+    {
+        "name": "Ian",
+        "lastname": "Taylor",
+        "password": "ianPass678",
+        "email": "ian.taylor@example.com",
+        "adminPrivileges": false
+    },
+    {
+        "name": "Jack",
+        "lastname": "Moore",
+        "password": "jackPass321",
+        "email": "jack.moore@example.com",
+        "adminPrivileges": true
+    }
+]

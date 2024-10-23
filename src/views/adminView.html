@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Productos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+</head>
+<body class="bg-gray-100">
+
+    <div class="container mx-auto mt-10">
+        <h1 class="text-3xl text-center font-bold mb-6">Gestión de Productos</h1>
+
+                <!-- Buscar productos -->
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-bold mb-4">Buscar Productos con Descuento</h2>
+                    <form action="product-handler.php" method="GET">
+                        <label for="sort" class="block mb-2">Ordenar por:</label>
+                        <select id="sort" name="sort" class="border border-gray-300 rounded p-2 mb-4">
+                            <option value="expensive">Más caro</option>
+                            <option value="cheaper">Más barato</option>
+                        </select>
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded" type="submit" name="action" value="price">Buscar Productos con Descuento</button>
+                    </form>
+                </div>
+
+        <!-- Mostrar productos -->
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-bold mb-4">Productos Disponibles</h2>
+            <form action="product-handler.php" method="GET">
+                <button class="bg-blue-500 text-white px-4 py-2 rounded" type="submit" name="action" value="list">Listar Productos</button>
+            </form>
+        </div>
+
+        <!-- Incrementar/Decrementar Stock -->
+        <div class="bg-white p-6 mt-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-bold mb-4">Modificar Stock de Producto</h2>
+            <form action="product-handler.php" method="POST">
+                <div class="mb-4">
+                    <label for="productId" class="block text-gray-700">ID de Producto:</label>
+                    <input type="number" id="productId" name="productId" class="w-full p-2 border rounded" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="quantity" class="block text-gray-700">Cantidad:</label>
+                    <input type="number" id="quantity" name="quantity" class="w-full p-2 border rounded" required>
+                </div>
+
+                <div class="flex gap-4">
+                    <button class="bg-green-500 text-white px-4 py-2 rounded" type="submit" name="action" value="increment">Incrementar Stock</button>
+                    <button class="bg-red-500 text-white px-4 py-2 rounded" type="submit" name="action" value="decrement">Decrementar Stock</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

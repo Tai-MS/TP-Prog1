@@ -2,8 +2,11 @@
 
 namespace App\Entity;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ManyToOne;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
@@ -15,38 +18,46 @@ class Ticket{
     private int|null $id = null;
 
     #[ORM\ManyToOne(targetEntity: UserData::class, inversedBy: 'ticket_user')]
-    protected UserData|null $user = null;  
+    public UserData $user;  
 
-    #[ORM\OneToMany(targetEntity: Purchase::class, mappedBy: 'products_purchase', cascade: ['persist', 'remove'])]
-    protected Collection $products;  
+    #[ORM\OneToMany(targetEntity: Purchase::class, mappedBy: 'ticket', cascade: ['persist', 'remove'])]
+    public Collection $purchase;  
 
-    #[ORM\Column(type: 'integer')]
-    protected int $total_value;
+    #[ORM\Column(type: 'datetime')]
+    public DateTime $date_ticket;
 
-    #[ORM\Column(type: 'date')]
-    protected DateTime $date_ticket;
-
-    protected function __construct(?UserData $user, Collection $products, int $total_value, ?DateTime $date_ticket = null)
+    public function __construct(?UserData $user, ?DateTime $date_ticket)
     {
         $this->user = $user;
-        $this->products = $products;
-        $this->total_value = $total_value;
+        $this->purchase = new ArrayCollection();
         $this->date_ticket = $date_ticket ?? new DateTime();
+    }
+
+    public function getId(): int{
+        return $this->id;
     }
 
     public function getUser(): ?UserData{
         return $this->user;
     }
 
-    public function getProducts(): Collection{
-        return $this->products;
+    public function getPurchase(): Collection{
+        return $this->purchase;
     }
 
-    public function getTotalValue(): int{
-        return $this->total_value;
-    }
-
-    public function getDateTime(): DateTime{
+    public function getDateTime(): ?DateTime{
         return $this->date_ticket;
+    }
+
+    public function setUser(UserData $user): void {
+        $this->user = $user;
+    }
+
+    public function addPurchase(Purchase $purchase): self {
+        if (!$this->purchase->contains($purchase)) {
+            $this->purchase->add($purchase);
+            $purchase->setTicket($this);
+        }
+        return $this;
     }
 }

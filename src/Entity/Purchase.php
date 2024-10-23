@@ -2,46 +2,55 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table('purchases')]
 
 class Purchase {
 
-    #[ORM\Id, ORM\Column(type: 'integer')]
+    #[ORM\Id, ORM\Column(type: 'integer'), ORM\GeneratedValue]
     private int|null $id = null;
 
-    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: "purchase_product", cascade: ['persist', 'remove'])]
-    public Collection $products;
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'purchaseProduct')]
+    private Product $items;
 
-    #[ORM\ManyToOne(targetEntity: Ticket::class, inversedBy: "products")]
-    public Ticket|null $products_purchase = null;
+    #[ORM\ManyToOne(targetEntity: Ticket::class, inversedBy: "purchase")]
+    public Ticket|null $ticket = null;
 
-    #[ORM\Column(type: "integer")]
-    public int $amount;
+    #[ORM\Column(type: 'integer')]
+    private int $quantity;
 
-    public function __construct(?Ticket $products_purchase, Collection $products, int $amount)
+    public function __construct(Product $items, int $quantity, Ticket $ticket)
     {
-        $this->products_purchase = $products_purchase;
-        $this->products = $products;
-        $this->amount = $amount;
+        $this->items = $items;
+        $this->quantity = $quantity;
+        $this->ticket = $ticket;
     }
 
     public function getId(): int {
         return $this->id;
     }
 
-    public function getProducts(): Collection {
-        return $this->products;
+    public function getItems(): Product {
+        return $this->items;
     }
 
-    public function getProductsPurchase(): ?Ticket {
-        return $this->products_purchase;
+    public function getTicket(): Ticket {
+        return $this->ticket;
     }
 
-    public function getAmount(): int {
-        return $this->amount;
+    public function getQuantity(): int {
+        return $this->quantity;
+    }
+
+    public function setTicket(Ticket $ticket): void {
+        $this->ticket = $ticket;
+    }
+
+    public function setPurchaseProduct(Product $items): void{
+        $this->items = $items;
     }
 }
