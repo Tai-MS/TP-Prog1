@@ -1,102 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
     <title>Lista de productos</title>
 </head>
-<body>
-    <?php
 
-    use App\Entity\ProductService;
+<body class="bg-gray-100 text-gray-900">
 
-    require_once '../bootstrap.php';
-    require_once '../Service/productService.php';
+    <div class="container mx-auto p-6">
+        <?php
 
-    use function PHPSTORM_META\type;
+        use App\Entity\ProductService;
 
-    $productService = new ProductService($entityManager);
+        require_once '../bootstrap.php';
+        require_once '../Service/productService.php';
 
-    $action = $_REQUEST['action'] ?? null;
+        $productService = new ProductService($entityManager);
 
-    if ($action === 'list') {
-        // Listar productos
-        $products = $productService->getAllProducts();
-        echo "<h3>Listado de Productos</h3>";
-        echo "<ul>";
-        foreach ($products as $product) {
-            echo "<li class='border-b border-gray-300 py-2'>ID: " . $product->getId() . 
-            " - Nombre: " . $product->getName() . 
-            " - Precio: " . $product->getPrice() . 
-            " - Stock: " . $product->getStock() . 
-            " <button class='buy-button' data-name='" . $product->getName() . "' data-price='" . $product->getPrice() . "'>Comprar</button></li>";
-        }
-        echo "</ul>";
-        echo '<form action="filter-handler.php" method="get">';
-        echo '<label for="text">Filtrar por nombre: </label>';
-        echo '<input type="text" name="text" id="text">';
-        echo '<button type="submit">Filtrar</button>';
-        echo '</form>';
+        $action = $_REQUEST['action'] ?? null;
 
-        echo '<script src="/public/js/products.js"></script>';
-    } elseif ($action === 'increment' || $action === 'decrement') {
-        header('Content-Type: application/json');
-        // Obtener el ID del producto y la cantidad
-        $productId = isset($_POST['productId']) ? (int) $_POST['productId'] : null;
-        $quantity = isset($_POST['quantity']) ? (int) $_POST['quantity'] : null;
+        if ($action === 'list') {
+            $products = $productService->getAllProducts();
+            echo "<h3 class='text-2xl font-bold mb-4'>Listado de Productos</h3>";
+            echo "<ul class='space-y-4'>";
+            foreach ($products as $product) {
+                echo "<li class='border-b border-gray-300 py-4 px-4 bg-white shadow-md rounded-lg flex justify-between items-center'>
+                        <div>
+                            <p>ID: <span class='font-semibold'>" . $product->getId() . "</span></p>
+                            <p>Nombre: <span class='font-semibold'>" . $product->getName() . "</span></p>
+                            <p>Precio: <span class='font-semibold'>" . $product->getPrice() . "</span></p>
+                            <p>Stock: <span class='font-semibold'>" . $product->getStock() . "</span></p>
+                        </div>
+                        <button class='buy-button bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition' data-id='" . $product->getId() . "' >Comprar</button>
+                    </li>";
+            }
+            echo "</ul>";
 
-        if ($productId && $quantity) {
-            $result = $productService->adjustStock($productId, (int)$quantity, $action);
-            $result = json_decode($result, true); 
-            echo $result['message'];    
-        } else {
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Falta el ID del producto o la cantidad.'
-            ]);
-        }
-    } elseif ($action === 'price'){
-        $products = $productService->getAll();
-        $sortOrder = $_GET['sort'] ?? null;
+            echo '<form action="filter-handler.php" method="get" class="mt-6">';
+            echo '<label for="text" class="block text-lg font-medium">Filtrar por nombre:</label>';
+            echo '<input type="text" name="text" id="text" class="border border-gray-300 rounded-lg px-4 py-2 w-full mt-2" placeholder="Ingrese el nombre del producto">';
+            echo '<button type="submit" class="bg-green-500 text-white px-4 py-2 mt-4 rounded hover:bg-green-600 transition">Filtrar</button>';
+            echo '</form>';
 
-    if ($sortOrder === 'cheaper') {
-        usort($products, function($a, $b) {
-            return $a->getPrice() <=> $b->getPrice(); 
-        });
-    }else{
-        usort($products, function($a, $b) {
-            return $b->getPrice() <=> $a->getPrice();
-        });
-
-    }
-
-    echo "<h3 class='text-xl font-bold mb-4'>Listado de Productos</h3>";
-    echo "<ul class='space-y-2'>";
-    foreach ($products as $product) {
-        echo "<li class='border-b border-gray-300 py-2'>ID: " . $product->getId() . 
-            " - Nombre: " . $product->getName() . 
-            " - Precio: " . $product->getPrice() . 
-            " - Stock: " . $product->getStock() . 
-            " <button class='buy-button' data-name='" . $product->getName() . "' data-price='" . $product->getPrice() . "'>Comprar</button></li>";
-    }
-    echo "</ul>";
-    echo '<script src="/public/js/products.js"></script>';
-    }elseif ($action === 'increment' || $action === 'decrement') {
-        $productId = $_POST['productId'] ?? null;
-        $quantity = $_POST['quantity'] ?? null;
-
-        if ($productId && $quantity) {
-            $result = $productService->adjustStock($productId, (int)$quantity, $action);
+            echo '<script src="/public/js/products.js"></script>';
+        } elseif ($action === 'increment' || $action === 'decrement') {
             header('Content-Type: application/json');
-            $result = json_decode($result, true); 
-            echo $result['message'];
-        } else {
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Acción no válida.'
-            ]);
+            $productId = isset($_POST['productId']) ? (int) $_POST['productId'] : null;
+            $quantity = isset($_POST['quantity']) ? (int) $_POST['quantity'] : null;
+
+            if ($productId && $quantity) {
+                $result = $productService->adjustStock($productId, (int)$quantity, $action);
+                $result = json_decode($result, true);
+                echo $result['message'];
+            } else {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Falta el ID del producto o la cantidad.'
+                ]);
+            }
+        } elseif ($action === 'price') {
+            $products = $productService->getAll();
+            $sortOrder = $_GET['sort'] ?? null;
+
+            if ($sortOrder === 'cheaper') {
+                usort($products, function ($a, $b) {
+                    return $a->getPrice() <=> $b->getPrice();
+                });
+            } else {
+                usort($products, function ($a, $b) {
+                    return $b->getPrice() <=> $a->getPrice();
+                });
+            }
+
+            echo "<h3 class='text-2xl font-bold mb-4'>Listado de Productos</h3>";
+            echo "<ul class='space-y-4'>";
+            foreach ($products as $product) {
+                echo "<li class='border-b border-gray-300 py-4 px-4 bg-white shadow-md rounded-lg flex justify-between items-center'>
+                        <div>
+                            <p>ID: <span class='font-semibold'>" . $product->getId() . "</span></p>
+                            <p>Nombre: <span class='font-semibold'>" . $product->getName() . "</span></p>
+                            <p>Precio: <span class='font-semibold'>" . $product->getPrice() . "</span></p>
+                            <p>Stock: <span class='font-semibold'>" . $product->getStock() . "</span></p>
+                        </div>
+                        <button class='buy-button bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition' data-id='" . $product->getId() . "' >Comprar</button>
+                    </li>";
+            }
+            echo "</ul>";
+            echo '<script src="/public/js/products.js"></script>';
         }
-    }
-    ?>
+        ?>
+    </div>
+
 </body>
+
 </html>

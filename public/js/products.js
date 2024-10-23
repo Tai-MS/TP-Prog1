@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     buyButtons.forEach(button => {
         button.addEventListener('click', function() {
+            
             const productId = this.getAttribute('data-id');
 
             let existingProduct = cartItems.find(item => item.id === productId);
