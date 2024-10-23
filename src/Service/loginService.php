@@ -42,6 +42,7 @@ class LoginService extends UserData {
 
     public function login($email, $password): string | bool | array | Throwable{
         try {
+            
             $ADMIN_EMAIL = $_ENV['ADMIN_EMAIL'];
             $ADMIN_PASSWORD = $_ENV['ADMIN_PASSWORD'];
             $ADMIN_EMAIL = $_ENV['ADMIN_EMAIL'];
@@ -50,7 +51,8 @@ class LoginService extends UserData {
                 'status' => '',
                 'message' => ''
             ];
-            
+            error_log('hola');
+            // echo json_encode('+++++++++++++++'. $this->getId(). '++++++++++++++');
             $verify_password = $this->comparePassword($email, $password);
             if($ADMIN_EMAIL === $email && $ADMIN_PASSWORD === $password){
                 $response['status'] = 'success';
@@ -64,10 +66,12 @@ class LoginService extends UserData {
                 $response['status'] = 'error';
                 $response['message'] = 'Invalid password or email';
             }else{
+                error_log('User ID: ' . $this->getEmail());
+
                 $response['status'] = 'success';
                 $response['message'] = 'Logged in';
                 $response['redirect'] = '/src/views/products.html';
-                // $response['redirect'] = '/src/views/index.html';
+                setcookie('userEmail', $this->getEmail(), time() + 360, '/');
             }
             return json_encode($response);
         } catch (Throwable $err) {
