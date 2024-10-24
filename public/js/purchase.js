@@ -52,7 +52,8 @@ $productos.addEventListener('submit', e => {
         body: JSON.stringify(dataForm),
         headers: {'Content-Type': 'application/json'}
     })
-    .then(data => data.json())
+    .then(data => {console.log(data)
+     , data.json()})
     .then(data => dataHandler(data))
     .catch(err => console.log(err));
     
@@ -62,7 +63,6 @@ $productos.addEventListener('submit', e => {
 
     };
 });
-
 function frontData(data) {
     const $ul = document.createElement('ul');
     $ul.className = 'list-group mb-3';

@@ -32,6 +32,33 @@ class EmailSender extends UserData {
         }
     }
 
+    public function sendTicket($email, $subject, $body){
+        $EMAIL_SENDER = $_ENV['EMAIL_SENDER'];
+        $EMAIL_SENDER_PASSWORD = $_ENV['EMAIL_SENDER_PASSWORD'];
+        $mail = new PHPMailer(true);
+        $EMAIL_SENDER = $_ENV['EMAIL_SENDER'];
+        $EMAIL_SENDER_PASSWORD = $_ENV['EMAIL_SENDER_PASSWORD'];
+        $mail = new PHPMailer(true);
+
+        $mail->isSMTP(); 
+        $mail->Host = 'smtp.gmail.com'; 
+        $mail->SMTPAuth = true; 
+        $mail->Username = $EMAIL_SENDER; 
+         $mail->Password = $EMAIL_SENDER_PASSWORD; 
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; 
+        $mail->Port = 587; 
+
+        $mail->setFrom($EMAIL_SENDER, 'Your last ticket.');
+        $mail->addAddress($email);
+
+        $mail->isHTML(true); 
+        $mail->Subject = $subject; 
+        $mail->Body    = $body; 
+
+        $mail->send();
+
+        return json_encode('Mail sent successfully!');
+    }
     public function sendEmail($email, $subject, $body, $cookie = ''){
         $EMAIL_SENDER = $_ENV['EMAIL_SENDER'];
         $EMAIL_SENDER_PASSWORD = $_ENV['EMAIL_SENDER_PASSWORD'];

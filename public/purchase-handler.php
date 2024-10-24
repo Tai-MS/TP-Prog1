@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Throwable;
 
+require_once '../src/Service/emailSender.php';
 require_once __DIR__ . '/../src/bootstrap.php';
 require_once __DIR__ . '/../src/Service/TicketService.php';
 require_once __DIR__ . '/../src/Service/purchaseService.php';
@@ -29,7 +30,18 @@ if($action === 'buy'){
     try{
         $user = $entityManager->getRepository(UserData::class)->findBy(array('email'=>$userEMail));
         $ticket = $ticketService->createTicket($user[0], null);
-        
+        $date = $ticket->getDateTime()->format('Y-m-d H:i:s');
+        $sendTicket = new EmailSender("", "", "", "", false, $entityManager);
+        $subject = 'Your last ticket';
+        $body = '
+            <h1>Ticket information:</h1>
+            <br>
+            <h2>Ticket ID: ' . $ticket->getId() . '</h2>
+            <h2>Date: ' . $date . '</h2>
+            
+        ';
+    
+        $result = $sendTicket->sendTicket($userEMail, $subject, $body);
         foreach($productsID as $productID){
             $product = $entityManager->getRepository(Product::class)->findBy(array('id'=>$productID));
             $purchase = $purchaseService->addPurchase($product[0], $quantity[$count], $ticket);
@@ -41,7 +53,7 @@ if($action === 'buy'){
             'Id' => $ticket->getId(),
             'Date' => $ticket->getDateTime()
         ];
-    
+        header('Content-Type: application/json; charset=utf-8');
         echo json_encode($response); 
     
     }catch(Throwable $error){
@@ -58,6 +70,10 @@ if($action === 'buy'){
                 'price' => $product->getPrice(),
             ];
         }
+
+
+
+    // echo $result;
         echo json_encode($products);
     }
 }

@@ -44,6 +44,7 @@
             echo '<input type="text" name="text" id="text" class="border border-gray-300 rounded-lg px-4 py-2 w-full mt-2" placeholder="Ingrese el nombre del producto">';
             echo '<button type="submit" class="bg-green-500 text-white px-4 py-2 mt-4 rounded hover:bg-green-600 transition">Filtrar</button>';
             echo '</form>';
+            echo '<a href="cart.html" class="bg-green-500 text-white px-4 py-2 mt-4 rounded hover:bg-green-600 transition">Carrito</a>';
 
             echo '<script src="/public/js/products.js"></script>';
         } elseif ($action === 'increment' || $action === 'decrement') {
@@ -89,6 +90,8 @@
                     </li>";
             }
             echo "</ul>";
+            echo '<a href="cart.html" class="bg-green-500 text-white px-4 py-2 mt-4 rounded hover:bg-green-600 transition">Carrito</a>';
+
             echo '<script src="/public/js/products.js"></script>';
         }
         ?>
