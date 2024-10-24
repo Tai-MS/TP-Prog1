@@ -69,6 +69,5 @@ if($formType === 'signup'){
 
     header('Content-Type: application/json; charset=utf-8');
     $result = $change_pass->changePassword($cookie_email, $password);
-    error_log($result);
     echo $result;
 }
