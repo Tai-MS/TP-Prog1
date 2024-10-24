@@ -78,8 +78,11 @@ function frontData(data) {
     $labelQuantity.textContent = `Cantidad: ${data.quantity}`;
     
     const $deleteButton = document.createElement('button');
-    $deleteButton.className = 'btn btn-danger btn-sm ms-2';
-    $deleteButton.onclick = () => deleteItemCart(data);
+    $deleteButton.className = 'delete btn btn-danger btn-sm ms-2';
+    $deleteButton.addEventListener('click', (e) => {
+        e.preventDefault();  // Evita que el formulario se envíe
+        deleteItemCart(data); // Llama a la función que maneja la eliminación
+    });
     $deleteButton.textContent = 'Eliminar';
     
     $liProduct.appendChild($labelQuantity);

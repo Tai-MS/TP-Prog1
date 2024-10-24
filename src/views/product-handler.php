@@ -48,20 +48,19 @@
 
             echo '<script src="/public/js/products.js"></script>';
         } elseif ($action === 'increment' || $action === 'decrement') {
-            header('Content-Type: application/json');
             $productId = isset($_POST['productId']) ? (int) $_POST['productId'] : null;
             $quantity = isset($_POST['quantity']) ? (int) $_POST['quantity'] : null;
+
+            echo "<h3 class='text-2xl font-bold mb-4'>Actualización de Stock</h3>";
 
             if ($productId && $quantity) {
                 $result = $productService->adjustStock($productId, (int)$quantity, $action);
                 $result = json_decode($result, true);
-                echo $result['message'];
+                echo "<p class='text-lg'>" . $result['message'] . "</p>";
             } else {
-                echo json_encode([
-                    'status' => 'error',
-                    'message' => 'Falta el ID del producto o la cantidad.'
-                ]);
+                echo "<p class='text-red-500'>Error: Falta el ID del producto o la cantidad.</p>";
             }
+
         } elseif ($action === 'price') {
             $products = $productService->getAll();
             $sortOrder = $_GET['sort'] ?? null;
