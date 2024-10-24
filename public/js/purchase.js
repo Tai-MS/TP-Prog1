@@ -63,7 +63,8 @@ $productos.addEventListener('submit', e => {
 function frontData(data) {
     const $ul = document.createElement('ul');
     $ul.className = 'list-group mb-3';
-
+    console.log("linea 66 ",data);
+    
     const $liProduct = document.createElement('li');
     $liProduct.className = 'bought-products list-group-item d-flex justify-content-between align-items-center';
     $liProduct.id = data.id;
@@ -76,7 +77,7 @@ function frontData(data) {
 
     const $deleteButton = document.createElement('button');
     $deleteButton.className = 'btn btn-danger btn-sm ms-2';
-    $deleteButton.onclick = () => deleteItemCart(data.id);
+    $deleteButton.onclick = () => deleteItemCart(data);
     $deleteButton.textContent = 'Eliminar';
 
     $liProduct.appendChild($labelQuantity);
@@ -85,6 +86,35 @@ function frontData(data) {
     $listaProductos.appendChild($ul);
 }
 
-function deleteItemCart(id) {
-    console.log(`Producto con ID ${id} eliminado`);
+function deleteItemCart(data) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || []; 
+    console.log("-----------");
+    console.log(data);
+    console.log("-----------");
+
+    // Find the item in the cart
+    let itemIndex = cart.findIndex(item => parseInt(item.id) === parseInt(data.id));
+   
+    console.log('itemIndex', itemIndex);
+    
+    if (itemIndex !== -1) { 
+        if (cart[itemIndex].quantity > 1) {
+            let newQuantity = cart[itemIndex].quantity -= 1; 
+            const $productElement = document.getElementById(data.id);
+            console.log("PRODUCTELEMNET ++++++++",$productElement.querySelector('.quantity-products'));
+            console.log("PRODUCTELEMNET ++++++++",$productElement);
+            
+            $productElement.querySelector('.quantity-products').textContent  = `Cantidad: ${newQuantity}`
+        } else {
+            cart.splice(itemIndex, 1); 
+            const $productElement = document.getElementById(data.id);
+            if ($productElement) {
+                $productElement.remove(); 
+            }
+        }
+        
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }
+    console.log('Updated cart:', cart);
 }
+
