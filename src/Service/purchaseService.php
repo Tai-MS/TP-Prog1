@@ -18,7 +18,6 @@ class purchaseService {
     public function addPurchase(Product $items, int $quantity, Ticket $ticket): Purchase | string{
         try{
             $productService = new ProductService($this->entityManager);
-            var_dump($items->getStock());
 
             if($items->getStock() >= $quantity){
                 $productService->adjustStock($items->getId(), $quantity, 'decrement');

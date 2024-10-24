@@ -4,7 +4,7 @@
 // require_once __DIR__ . '/../bootstrap.php';
 // require_once __DIR__ . '/../Service/signUpService.php';
 
-// $singUpService = new SignUp();
+// $singUpService = new SignUp("", "", "", "", false, $entityManager);
 
 // $jsonData = file_get_contents(__DIR__ . '/../users.json');
 // $usersArray = json_decode($jsonData, true); 

@@ -8,25 +8,17 @@ require_once __DIR__ . '/../src/bootstrap.php';
 require_once __DIR__ . '/../src/Service/TicketService.php';
 require_once __DIR__ . '/../src/Service/purchaseService.php';
 
-$_POST = json_decode(file_get_contents('php://input'), true);
+header('Content-Type: application/json');
+
+$input = file_get_contents('php://input');
+
+$_POST = json_decode($input, true);
 
 $action = isset($_POST['action']) ? $_POST['action'] : null;
 $productsID = isset($_POST['productsID']) ? $_POST['productsID'] : [];
 
-foreach($productsID as $productID){
-    $product = $entityManager->getRepository(Product::class)->find($productID);
-    if ($product) {
-        $products = [
-            'id'    => $product->getId(),
-            'name'  => $product->getName(),
-            'price' => $product->getPrice(),
-        ];
-    }
-    echo json_encode($products);
-}
-
 if($action === 'buy'){
-    $userEMail = $_POST['useEMail'];
+    $userEMail = $_POST['userEMail'];
     $quantity = $_POST['quantity'];
     
     $ticketService = new TicketService($entityManager);
@@ -50,9 +42,22 @@ if($action === 'buy'){
             'Date' => $ticket->getDateTime()
         ];
     
-        return json_encode($response); 
+        echo json_encode($response); 
     
     }catch(Throwable $error){
-        return $error->getMessage();
+        echo json_encode(['error' => $error->getMessage()]);
+        exit;
+    }
+}else {
+    foreach($productsID as $productID){
+        $product = $entityManager->getRepository(Product::class)->find($productID);
+        if ($product) {
+            $products = [
+                'id'    => $product->getId(),
+                'name'  => $product->getName(),
+                'price' => $product->getPrice(),
+            ];
+        }
+        echo json_encode($products);
     }
 }

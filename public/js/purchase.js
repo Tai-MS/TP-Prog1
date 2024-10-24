@@ -31,55 +31,57 @@ window.addEventListener('DOMContentLoaded', e => {
 
 $productos.addEventListener('submit', e => {
     e.preventDefault();
+    
+    const $email = getCookieValue('userEmail');
+
     const $productsID = Array.from(document.querySelectorAll('.bought-products'))
-        .map(product => product.id);
+    .map(product => product.id);
 
     const $quantity = Array.from(document.querySelectorAll('.quantity-products'))
         .map(input => input.id);
-
+        
     const dataForm = {
-        'userEMail': document.cookie.replace('userEmail=', '').replace('%', '@'),
-        'productsID': $productsID,
-        'quantity': $quantity
+    "userEMail": $email,
+    "productsID": $productsID,
+    "quantity": $quantity,
+    "action": "buy"
     };
-
-    console.log(dataForm);
 
     fetch('../../public/purchase-handler.php', {
         method: 'POST',
         body: JSON.stringify(dataForm),
-        headers: { 'Content-Type': 'application/json' }
+        headers: {'Content-Type': 'application/json'}
     })
     .then(data => data.json())
     .then(data => dataHandler(data))
     .catch(err => console.log(err));
-
+    
     const dataHandler = (data) => {
-        console.log(data);
-        // window.location.href = '../../src/views/ticket.html';
+        window.location.href = '../views/products.html';
+        localStorage.clear();
+
     };
 });
 
 function frontData(data) {
     const $ul = document.createElement('ul');
     $ul.className = 'list-group mb-3';
-    console.log("linea 66 ",data);
-    
+
     const $liProduct = document.createElement('li');
     $liProduct.className = 'bought-products list-group-item d-flex justify-content-between align-items-center';
     $liProduct.id = data.id;
     $liProduct.textContent = `${data.name}: $${data.price}`;
-
+    
     const $labelQuantity = document.createElement('span');
     $labelQuantity.className = 'quantity-products badge bg-primary rounded-pill';
     $labelQuantity.id = data.quantity;
     $labelQuantity.textContent = `Cantidad: ${data.quantity}`;
-
+    
     const $deleteButton = document.createElement('button');
     $deleteButton.className = 'btn btn-danger btn-sm ms-2';
     $deleteButton.onclick = () => deleteItemCart(data);
     $deleteButton.textContent = 'Eliminar';
-
+    
     $liProduct.appendChild($labelQuantity);
     $liProduct.appendChild($deleteButton);
     $ul.appendChild($liProduct);
@@ -118,3 +120,7 @@ function deleteItemCart(data) {
     console.log('Updated cart:', cart);
 }
 
+function getCookieValue (name) {
+    const match = document.cookie.split('; ').find(row => row.startsWith(`${name}=`));
+    return match ? decodeURIComponent(match.split('=')[1]) : '';
+};
